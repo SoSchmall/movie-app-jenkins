@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: movies-api
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: movies-api
+  template:
+    metadata:
+      labels:
+        app: movies-api
+    spec:
+      containers:
+        - name: movie-service
+          image: vikinghacker/movie-app:latest
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DATABASE_URI
+              value: "postgresql://movie_db_username:movie_db_password@movie_db/movie_db_dev"
+            - name: CAST_SERVICE_HOST_URL
+              value: "http://casts-api-svc:8000/api/v1/casts/"
