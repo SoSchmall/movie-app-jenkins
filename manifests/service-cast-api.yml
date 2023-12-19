@@ -4,7 +4,7 @@ metadata:
   name: casts-api-svc
 spec:
   selector:
-    app: casts-api
+    app: cast-service
   ports:
     - protocol: TCP
       port: 8000

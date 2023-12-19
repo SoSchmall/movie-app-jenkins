@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: casts-api
+  name: cast-service
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      app: casts-api
+      app: cast-service
   template:
     metadata:
       labels:
-        app: casts-api
+        app: cast-service
     spec:
       containers:
         - name: cast-service
