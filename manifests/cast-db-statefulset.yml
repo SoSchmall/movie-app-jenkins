@@ -24,5 +24,9 @@ spec:
             - name: POSTGRES_DB
               value: cast_db_dev
           volumeMounts:
-            - name: postgres-data-shared
-              mountPath: /var/lib/postgresql/data/cast
+            - name: postgres-data-cast
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-data-cast
+          persistentVolumeClaim:
+            claimName: postgres-data-cast
