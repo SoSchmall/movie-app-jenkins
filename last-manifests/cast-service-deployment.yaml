@@ -14,6 +14,12 @@ spec:
       labels:
         app: cast-service
     spec:
+      initContainers:
+      - name: check-db-ready
+        image: postgres:12.1-alpine
+        command: ['sh', '-c', 
+          'until pg_isready -h cast-db -p 5432; 
+          do echo waiting for database; sleep 2; done;']
       containers:
       - name: cast-service
         image: vikinghacker/cast-app:latest
@@ -24,3 +30,5 @@ spec:
           value: postgresql://cast_db_username:cast_db_password@cast-db/cast_db_dev
         ports:
         - containerPort: 8000
+          protocol: TCP
+      restartPolicy: Always
