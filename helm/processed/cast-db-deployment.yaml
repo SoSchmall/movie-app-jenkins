@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.cast_db_deployment.name }}
+  labels:
+    app: {{ .Values.cast_db_deployment.app }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.cast_db_deployment.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.cast_db_deployment.app }}
+    spec:
+      containers:
+      - name: {{ .Values.cast_db_deployment.name }}
+        image: {{ .Values.cast_db_deployment.image }}
+        env:
+        - name: {{ .Values.cast_db_deployment.envNameDb }}
+          value: {{ .Values.cast_db_deployment.envNameDbValue }}
+        - name: {{ .Values.cast_db_deployment.envNamePassword }}
+          value: {{ .Values.cast_db_deployment.envNamePasswordValue }}
+        - name: {{ .Values.cast_db_deployment.envNameUser }}
+          value: {{ .Values.cast_db_deployment.envNameUserValue }}
+        volumeMounts:
+        - mountPath: {{ .Values.cast_db_deployment.volumeMountsPath }}
+          name: {{ .Values.cast_db_deployment.volumeMountsName }}
+      volumes:
+      - name: {{ .Values.cast_db_deployment.volumesName }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.cast_db_deployment.persistentVolumeClaimName }}
