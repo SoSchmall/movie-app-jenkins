@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.movie_db_deployment.name }}
+  labels:
+    app: {{ .Values.movie_db_deployment.app }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.movie_db_deployment.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.movie_db_deployment.app }}
+    spec:
+      containers:
+      - name: {{ .Values.movie_db_deployment.containersName }}
+        image: {{ .Values.movie_db_deployment.containersImage }}
+        env:
+        - name: {{ .Values.movie_db_deployment.envNameDb }}
+          value: {{ .Values.movie_db_deployment.envNameDbValue }}
+        - name: {{ .Values.movie_db_deployment.envNamePassword }}
+          value: {{ .Values.movie_db_deployment.envNamePasswordValue }}
+        - name: {{ .Values.movie_db_deployment.envNameUser }}
+          value: {{ .Values.movie_db_deployment.envNameUserValue }}
+        volumeMounts:
+        - mountPath: {{ .Values.movie_db_deployment.volumeMountsPath }}
+          name: {{ .Values.movie_db_deployment.volumeMountsName }}
+      volumes:
+      - name: {{ .Values.movie_db_deployment.volumesName }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.movie_db_deployment.persistentVolumeClaimName }}

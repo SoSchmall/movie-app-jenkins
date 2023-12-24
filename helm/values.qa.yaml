@@ -1,0 +1,159 @@
+cast_db_deployment:
+  name: cast-db
+  app: cast-db
+  image: postgres:12.1-alpine
+  envNameDb: POSTGRES_DB
+  envNameDbValue: cast_db_dev
+  envNamePassword: POSTGRES_PASSWORD
+  envNamePasswordValue: cast_db_password
+  envNameUser: POSTGRES_USER
+  envNameUserValue: cast_db_username
+  volumeMountsPath: /var/lib/postgresql/data
+  volumeMountsName: postgres-data-cast
+  volumesName: postgres-data-cast
+  persistentVolumeClaimName: postgres-data-cast
+
+cast_db_service:
+  name: cast-db
+  app: cast-db
+  protocol: TCP
+  port: 5432
+  targetPort: 5432
+
+cast_service_claim0_persistentvolumeclaim:
+  name: cast-service-claim0
+  accessModes: ReadWriteOnce
+  storage: 100Mi
+
+cast_service_deployment:
+  name: cast-service
+  app: cast-service
+  initContainersName: check-db-ready
+  initContainersImage: postgres:12.1-alpine
+  containersName: cast-service
+  containersImage: vikinghacker/cast-app:latest
+  envName: DATABASE_URI
+  envValue: postgresql://cast_db_username:cast_db_password@cast-db/cast_db_dev
+  containerPort: 8000
+  protocol: TCP
+  restartPolicy: Always
+
+cast_service_nodeport:
+  name: cast-service
+  type: NodePort
+  portName: http
+  port: 8002
+  targetPort: 8000
+  nodePort: 30002
+  app: cast-service
+
+cast_service_service:
+  name: cast-service
+  portName: http
+  port: 8002
+  targetPort: 8000
+  app: cast-service
+
+movie_db_deployment:
+  name: movie-db
+  app: movie-db
+  containersName: movie-db
+  containersImage: postgres:12.1-alpine
+  envNameDb: POSTGRES_DB
+  envNameDbValue: movie_db_dev
+  envNamePassword: POSTGRES_PASSWORD
+  envNamePasswordValue: movie_db_password
+  envNameUser: POSTGRES_USER
+  envNameUserValue: movie_db_username
+  volumeMountsPath: /var/lib/postgresql/data
+  volumeMountsName: postgres-data-movie
+  volumesName: postgres-data-movie
+  persistentVolumeClaimName: postgres-data-movie
+
+movie_db_service:
+  name: movie-db
+  app: movie-db
+  protocol: TCP
+  port: 5432
+  targetPort: 5432
+
+movie_service_claim0_persistentvolumeclaim:
+  name: movie-service-claim0
+  accessModes: ReadWriteOnce
+  storage: 100Mi
+
+movie_service_deployment:
+  name: movie-service
+  app: movie-service
+  initContainersName: check-db-ready
+  initContainersImage: postgres:12.1-alpine
+  containersName: movie-service
+  containersImage: vikinghacker/movie-app:latest
+  envName: DATABASE_URI
+  envValue: postgresql://movie_db_username:movie_db_password@movie-db/movie_db_dev
+  envNameHost: CAST_SERVICE_HOST_URL
+  envNameHostValue: http://cast-service:8000/api/v1/casts/
+  containerPort: 8000
+
+movie_service_nodeport:
+  name: movie-service
+  type: NodePort
+  namePort: http
+  port: 8001
+  targetPort: 8000
+  nodePort: 30001
+  app: movie-service
+
+movie_service_service:
+  name: movie-service
+  namePort: http
+  port: 8001
+  targetPort: 8000
+  app: movie-service
+
+nginx_claim0_persistentvolumeclaim:
+  name: nginx-claim0
+  accessModes: ReadWriteOnce
+  storage: 100Mi
+
+nginx_configmap:
+  name: nginx-config
+
+nginx_deployment:
+  name: nginx
+  app: nginx
+  containersName: nginx
+  image: nginx:latest
+  containerPort: 8081
+  mountPath: /etc/nginx/conf.d
+  volumeName: nginx-config
+  configMapName: nginx-config
+
+nginx_service:
+  name: nginx
+  namePort: http
+  port: 8081
+  targetPort: 8080
+  app: nginx
+
+nginx_service_nodeport:
+  name: nginx
+  type: NodePort
+  namePort: http
+  port: 8081
+  targetPort: 8080
+  nodePort: 30003
+  app: nginx
+
+postgres_data_cast_persistentvolumeclaim:
+  name: postgres-data-cast
+  accessModes: ReadWriteOnce
+  storage: 2Gi
+
+postgres_data_movie_persistentvolumeclaim:
+  name: postgres-data-movie
+  accessModes: ReadWriteOnce
+  storage: 2Gi
+
+
+

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.movie_service_deployment.name }}
+  labels:
+    app: {{ .Values.movie_service_deployment.app }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.movie_service_deployment.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.movie_service_deployment.app }}
+    spec:
+      initContainers:
+      - name: {{ .Values.movie_service_deployment.initContainersName }}
+        image: {{ .Values.movie_service_deployment.initContainersImage }}
+        command: ['sh', '-c', 
+          'until pg_isready -h movie-db -p 5432; 
+          do echo waiting for database; sleep 2; done;']
+      containers:
+      - name: {{ .Values.movie_service_deployment.containersName }}
+        image: {{ .Values.movie_service_deployment.containersImage }}
+        command: ["uvicorn"]
+        args: ["app.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
+        env:
+        - name: {{ .Values.movie_service_deployment.envName }}
+          value: {{ .Values.movie_service_deployment.envValue }}
+        - name: {{ .Values.movie_service_deployment.envNameHost }}
+          value: {{ .Values.movie_service_deployment.envNameHostValue }}
+        ports:
+        - containerPort: {{ .Values.movie_service_deployment.containerPort }}

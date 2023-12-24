@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.movie_service_nodeport.name }}
+spec:
+  type: {{ .Values.movie_service_nodeport.type }}
+  ports:
+    - name: {{ .Values.movie_service_nodeport.namePort }}
+      port: {{ .Values.movie_service_nodeport.port }}
+      targetPort: {{ .Values.movie_service_nodeport.targetPort }}
+      nodePort: {{ .Values.movie_service_nodeport.nodePort }}
+  selector:
+    app: {{ .Values.movie_service_nodeport.app }}
