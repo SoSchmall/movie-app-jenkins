@@ -3,7 +3,7 @@ pipeline {
     DOCKER_ID = "vikinghacker"
     DOCKER_IMAGE_MOVIE = "movie-app"
     DOCKER_IMAGE_CAST = "cast-app"
-    DOCKER_TAG = "v.${BUILD_ID}.0"
+    // DOCKER_TAG = "v.${BUILD_ID}.0"
 }
 
 agent any
@@ -52,7 +52,9 @@ stages {
         //         script {
         //         sh '''
         //         docker login -u $DOCKER_ID -p $DOCKER_PASS
-        //         docker push $DOCKER_ID/$DOCKER_IMAGE:$DOCKER_TAG
+        //         docker push $DOCKER_ID/$DOCKER_IMAGE_MOVIE:$DOCKER_TAG
+                // docker push $DOCKER_ID/$DOCKER_IMAGE_CAST:$DOCKER_TAG
+        //     
         //         '''
         //         }
         //     }
@@ -67,7 +69,7 @@ stages {
                 steps {
                     script {
                     sh '''
-                    helm upgrade --install app-dev templates/ -f values.dev.yaml --namespace dev --create-namespace
+                    helm upgrade --install app-dev helm/ -f helm/values.dev.yaml --namespace dev --create-namespace
                     '''
                     }
                 }
@@ -83,7 +85,7 @@ stages {
                 steps {
                     script {
                     sh '''
-                    helm upgrade --install app-qa templates/ -f values.dev.yaml --namespace dev --create-namespace
+                    helm upgrade --install app-qa helm/ -f helm/values.qa.yaml --namespace qa --create-namespace
                     '''
                     }
                 }
@@ -99,7 +101,7 @@ stages {
                 steps {
                     script {
                     sh '''
-                    helm upgrade --install app-staging templates/ -f values.dev.yaml --namespace dev --create-namespace
+                    helm upgrade --install app-staging helm/ -f helm/values.staging.yaml --namespace staging --create-namespace
                     '''
                     }
                 }
@@ -112,7 +114,7 @@ stages {
         stage('Deploiement en prod'){
                 environment
                 {
-                KUBECONFIG = credentials("EKS-config")
+                KUBECONFIG = credentials("kube-config")
                 }
                     steps {
                         timeout(time: 15, unit: "MINUTES") {
@@ -121,18 +123,18 @@ stages {
                         script {
                         sh 
                         '''
-                        helm upgrade --install app-prod templates/ -f values.dev.yaml --namespace dev --create-namespace
+                        helm upgrade --install app-prod helm/ -f helm/values.prod.yaml --namespace prod --create-namespace
                         '''
                         }
                     }
                 }
 
-        stage('Prune Docker data') {
-                steps {
-                    sh 'docker system prune -a --volumes -f'
-                }
+        // stage('Prune Docker data') {
+        //         steps {
+        //             sh 'docker system prune -a --volumes -f'
+        //         }
 
-        }
+        // }
     }
         // post { // send email when the job has failed
         //     success {
