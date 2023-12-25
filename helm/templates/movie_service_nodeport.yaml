@@ -8,6 +8,6 @@ spec:
     - name: {{ .Values.movie_service_nodeport.namePort }}
       port: {{ .Values.movie_service_nodeport.port }}
       targetPort: {{ .Values.movie_service_nodeport.targetPort }}
-      nodePort: {{ .Values.movie_service_nodeport.nodePort }}
+      # nodePort: {{ .Values.movie_service_nodeport.nodePort }}
   selector:
     app: {{ .Values.movie_service_nodeport.app }}

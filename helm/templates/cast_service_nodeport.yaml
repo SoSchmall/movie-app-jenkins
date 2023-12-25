@@ -8,6 +8,6 @@ spec:
     - name: {{ .Values.cast_service_nodeport.portName }}
       port: {{ .Values.cast_service_nodeport.port }}
       targetPort: {{ .Values.cast_service_nodeport.targetPort }}
-      nodePort: {{ .Values.cast_service_nodeport.nodePort }}
+      # nodePort: {{ .Values.cast_service_nodeport.nodePort }}
   selector:
     app: {{ .Values.cast_service_nodeport.app }}

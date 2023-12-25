@@ -5,9 +5,9 @@ metadata:
 spec:
   type: {{ .Values.nginx_service_nodeport.type }}
   ports:
-    - name: {{ .Values.nginx_service_nodeport.type }}
+    - name: {{ .Values.nginx_service_nodeport.namePort }}
       port: {{ .Values.nginx_service_nodeport.port }}
       targetPort: {{ .Values.nginx_service_nodeport.targetPort }}
-      nodePort: {{ .Values.nginx_service_nodeport.nodePort }}
+      # nodePort: {{ .Values.nginx_service_nodeport.nodePort }}
   selector:
     app: {{ .Values.nginx_service_nodeport.app }}
