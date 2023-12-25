@@ -5,7 +5,7 @@ metadata:
 spec:
   type: {{ .Values.nginx_service_nodeport.type }}
   ports:
-    - name: {{ .Values.nginx_service_nodeport.type }}
+    - name: {{ .Values.nginx_service_nodeport.http }}
       port: {{ .Values.nginx_service_nodeport.port }}
       targetPort: {{ .Values.nginx_service_nodeport.targetPort }}
       nodePort: {{ .Values.nginx_service_nodeport.nodePort }}
