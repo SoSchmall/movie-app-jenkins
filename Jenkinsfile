@@ -1,10 +1,10 @@
 pipeline {
     environment {
-    DOCKER_ID = "vikinghacker"
-    DOCKER_IMAGE_MOVIE = "movie-app"
-    DOCKER_IMAGE_CAST = "cast-app"
-    // DOCKER_TAG = "v.${BUILD_ID}.0"
-}
+        DOCKER_ID = "vikinghacker"
+        DOCKER_IMAGE_MOVIE = "movie-app"
+        DOCKER_IMAGE_CAST = "cast-app"
+        // DOCKER_TAG = "v.${BUILD_ID}.0"
+    }
 
 agent any
 stages {
@@ -63,7 +63,7 @@ stages {
         stage('Deploiement en dev'){
             environment
             {
-                KUBECONFIG = credentials("kube-config")
+                KUBECONFIG = credentials("config")
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS")
             }
                 steps {
@@ -79,7 +79,7 @@ stages {
         stage('Deploiement en qa'){
             environment
             {
-                KUBECONFIG = credentials("kube-config")
+                KUBECONFIG = credentials("config")
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS")
             }
                 steps {
@@ -95,7 +95,7 @@ stages {
         stage('Deploiement en staging'){
             environment
             {
-                KUBECONFIG = credentials("kube-config")
+                KUBECONFIG = credentials("config")
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS")
             }
                 steps {
@@ -114,7 +114,7 @@ stages {
         stage('Deploiement en prod'){
                 environment
                 {
-                KUBECONFIG = credentials("kube-config")
+                KUBECONFIG = credentials("config")
                 }
                     steps {
                         timeout(time: 15, unit: "MINUTES") {
@@ -136,27 +136,15 @@ stages {
 
         // }
     }
-        // post { // send email when the job has failed
-        //     success {
-        //         script {
-        //             slackSend botUser: true, color: 'good', message: 'Successful :jenkins-${JOB_NAME}-${BUILD_ID}', teamDomain: 'DEVOPS TEAM', tokenCredentialId: 'slack-bot-token'
-        //         }
-        //     }
-            
-        //     failure {
-        //         script {
-        //             slackSend botUser: true, color: 'danger', message: 'Failure :jenkins-${JOB_NAME}-${BUILD_ID}', teamDomain: 'DEVOPS TEAM', tokenCredentialId: 'slack-bot-token'
-        //         }
-        //     }
-            // ..
-            /*
-            failure {
-                echo "This will run if the job failed"
-                mail to: "youssef.kadi@gmail.com",
-                    subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
-                    body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
-            }
-            */
-            // ..
-       // }
-    }
+
+    // post {
+
+    //     failure {
+    //         echo "This will run if the job failed"
+    //         mail to: "nawfal.eddaoudi@gmail.com",
+    //             subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
+    //             body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
+    //     }
+    
+    // }
+}
