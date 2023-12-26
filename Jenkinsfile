@@ -115,6 +115,7 @@ stages {
                 environment
                 {
                 KUBECONFIG = credentials("config")
+                DOCKER_PASS = credentials("DOCKER_HUB_PASS")
                 }
                     steps {
                         timeout(time: 15, unit: "MINUTES") {
