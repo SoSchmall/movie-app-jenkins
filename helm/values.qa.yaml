@@ -154,6 +154,3 @@ postgres_data_movie_persistentvolumeclaim:
   name: postgres-data-movie
   accessModes: ReadWriteOnce
   storage: 2Gi
-
-
-
