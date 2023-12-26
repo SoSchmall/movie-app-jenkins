@@ -117,9 +117,9 @@ stages {
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS")
             }
             steps {
-                timeout(time: 15, unit: "MINUTES") {
-                    input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                }
+                // timeout(time: 15, unit: "MINUTES") {
+                //     input message: 'Do you want to deploy in production ?', ok: 'Yes'
+                // }
                 script {
                     sh 
                     '''
