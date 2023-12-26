@@ -112,23 +112,22 @@ stages {
 
 
         stage('Deploiement en prod'){
-                environment
-                {
+            environment {
                 KUBECONFIG = credentials("config")
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS")
+            }
+            steps {
+                timeout(time: 15, unit: "MINUTES") {
+                    input message: 'Do you want to deploy in production ?', ok: 'Yes'
                 }
-                    steps {
-                        timeout(time: 15, unit: "MINUTES") {
-                            input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                        }
-                        script {
-                        sh 
-                        '''
-                        helm upgrade --install app-prod helm/ -f helm/values.prod.yaml --namespace prod --create-namespace
-                        '''
-                        }
-                    }
+                script {
+                    sh 
+                    '''
+                    helm upgrade --install app-prod helm/ -f helm/values.prod.yaml --namespace prod --create-namespace
+                    '''
                 }
+            }
+        }
 
         // stage('Prune Docker data') {
         //         steps {
@@ -142,7 +141,7 @@ stages {
 
     //     failure {
     //         echo "This will run if the job failed"
-    //         mail to: "nawfal.eddaoudi@gmail.com",
+    //         mail to: "nawfal@gmail.com",
     //             subject: "${env.JOB_NAME} - Build # ${env.BUILD_ID} has failed",
     //             body: "For more info on the pipeline failure, check out the console output at ${env.BUILD_URL}"
     //     }
