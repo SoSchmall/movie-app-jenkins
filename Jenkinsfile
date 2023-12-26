@@ -60,7 +60,7 @@ stages {
         //     }
         // }
 
-        stage('Deploiement en dev'){
+        stage('Deploiement en dev') {
             environment
             {
                 KUBECONFIG = credentials("config")
@@ -75,8 +75,7 @@ stages {
                 }
         }
 
-
-        stage('Deploiement en qa'){
+        stage('Deploiement en qa') {
             environment
             {
                 KUBECONFIG = credentials("config")
@@ -91,8 +90,7 @@ stages {
                 }
         }
 
-
-        stage('Deploiement en staging'){
+        stage('Deploiement en staging') {
             environment
             {
                 KUBECONFIG = credentials("config")
@@ -107,27 +105,26 @@ stages {
                 }
         }
 
-
-
-
-
-        stage('Deploiement en prod'){
-            environment {
+        stage('Deploiement en prod') {
+            environment
+            {
                 KUBECONFIG = credentials("config")
                 DOCKER_PASS = credentials("DOCKER_HUB_PASS")
             }
-            steps {
-                // timeout(time: 15, unit: "MINUTES") {
-                //     input message: 'Do you want to deploy in production ?', ok: 'Yes'
-                // }
-                script {
-                    sh 
-                    '''
+                steps {
+                    script {
+                    sh '''
                     helm upgrade --install app-prod helm/ -f helm/values.prod.yaml --namespace prod --create-namespace
                     '''
+                    }
                 }
-            }
         }
+
+
+
+
+
+        
 
         // stage('Prune Docker data') {
         //         steps {
