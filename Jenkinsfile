@@ -20,7 +20,7 @@ agent any
             }
         }
 
-        stage('Testing both movie and cast services') {
+        stage('Testing both movie and cast services images') {
             steps {
                 script {
                     def movieServiceStatus = sh(script: 'curl -s -o /dev/null -w "%{http_code}" http://0.0.0.0:8001/api/v1/movies/docs', returnStdout: true).trim()
