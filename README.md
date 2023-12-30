@@ -1,5 +1,5 @@
-# python-microservice-fastapi
-Learn to build your own microservice using Python and FastAPI
+# Overview
+This project contains two microservices: movie_service and cast_service, designed to manage a movie database and its associated cast details. These services are containerized using Docker and orchestrated with Docker Compose.
 
 # How to run?
  - docker-compose build
